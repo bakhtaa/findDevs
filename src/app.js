@@ -1,9 +1,13 @@
 const express= require('express');
-require("./config/database.js");
+const connect= require('./config/database');
+
 const app = express();
 
-
-
+connect().then(()=>{console.log("connected babby");
 app.listen(3000, ()=>{
     console.log("server running");
 });
+}).catch(err=>{
+    console.error("etissal maktouu3");
+});
+
