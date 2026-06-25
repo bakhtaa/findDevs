@@ -35,7 +35,28 @@ catch(err){
 //this will save the data to the database 
 //the save function will return a promise this is why you should use async await 
 
+app.get("/feed", async (req, res)=>{
+    try{
+     const users = await User.find({});
+     res.send(users);
+    }
+   catch(err){
+    res.status(400).send('mechekel f thniya');
+   }
+})
 
+app.delete("/user/:id", async (req,res)=>{
+     //const userId= req.body.userId;
+        const userId = req.params.id;
+    try{
+       const user = await User.findByIdAndDelete(userId);
+       res.send("yeey");
+        
+    }
+    catch(err){
+     res.status(400).send("errora");
+    }
+})
 
 
 
@@ -47,6 +68,6 @@ app.listen(3000, ()=>{
     console.log("server running");
 });
 }).catch(err=>{
-    console.error("etissal maktou3");
+      console.error(err);
 });
 
