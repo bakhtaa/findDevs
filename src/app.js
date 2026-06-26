@@ -61,7 +61,9 @@ app.delete("/user/:id", async (req,res)=>{
 
 
 
-connect().then(()=>{console.log("connected babby");
+connect().then( ()=>{
+    
+    console.log("connected babby");
 //once your database is successfullly connected then you should do your app.listen(), 
 //ceci assure que le client mayadhrabch aa serveur wel basa mezelt mehich connecté
 app.listen(3000, ()=>{
