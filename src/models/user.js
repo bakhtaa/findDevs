@@ -1,5 +1,6 @@
 const { Timestamp } = require("mongodb");
 const mongoose = require("mongoose");
+var validator= require('validator');
 const userSchema= mongoose.Schema(
     {
         firstName: {
@@ -14,7 +15,12 @@ const userSchema= mongoose.Schema(
 
             type: String,
             required: true,
-            unique: true
+            unique: true,
+            validate(value){
+                if (! validator.isEmail(value)){
+                  throw new Error("invalid email address bro");
+                };
+            }
         }, 
         password: {
             type: String,
