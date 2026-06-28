@@ -4,6 +4,8 @@ const connect= require('./config/database');
 const app = express();
 
 const User= require('./models/user');
+const {validateSignUpData}= require('./utils/validation')
+const bcrypt= require("bcrypt");
 
 app.use(express.json());
 //now our middleware express.json() will be activated for all the routes
@@ -13,18 +15,33 @@ app.use(express.json());
 //then this will only work for route1 and not all routes but for all type of requests
 
 app.post("/signup", async(req, res )=>{
+    try{
 // bech nekhdhou ldata stocké fel req w nhotouha fel basa
 //nasn3ou instance mta3 lmodel user nostockiw feha data li jetna mel req
+validateSignUpData(req);
+const {firstName,lastName,emailId,password}= req.body;
     console.log("Signup route hit");
 console.log(req.body);
+
 //data in sent to the poster in the body of a post request but our express server is unable to read
 //json data, to be able to read json data we have to use a middleware , this is why when we write 
 //console.log(req.body) we get undefined
 //we need a middleware because it's a function that's gonna be used for all the apis 
 //it is used to convert the json object into a javascript object so we can use that data into the code
 
-const user= new User(req.body);
-try{
+
+//encrypt the password 
+const passwordHash= await bcrypt.hash(password,10);
+console.log(passwordHash);
+
+
+const user= new User({
+    firstName,
+    lastName,
+    emailId,
+    password: passwordHash
+});
+
 await user.save();
 res.send("user signed in yee yee");
 }
