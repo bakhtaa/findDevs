@@ -46,11 +46,40 @@ await user.save();
 res.send("user signed in yee yee");
 }
 catch(err){
-    res.status(400).send("error occured"+ err.message);
+    res.status(400).send("error occured "+ err.message);
 }
 })
 //this will save the data to the database 
 //the save function will return a promise this is why you should use async await 
+
+app.post("/login", async (req,res)=>{
+    try{
+       const  {emailId,password} = req.body; 
+       //select document user where email mtena is equal to emailid w hotou fel variable user
+       const user= await User.findOne({ emailId: emailId});
+       //if email is not valid then user will be undefined and we should throw an error
+       if(!user){
+        throw new Error("email not valid");
+       }
+       //hata error masaret yani email valid yani ahna we are here fel code
+       //tawa najmou ntestiw lmdpasse
+       //le role de bcrypt.compare est de prendre en parametre le mdp entré par l'utilisateur et 
+       //stocké in the request , et de prendre en parametre le mot de passe haché de la database et 
+       // de tout faire pour que ça marche  
+       const ispasswordvalid= await bcrypt.compare(password, user.password);
+
+       if(ispasswordvalid){
+        res.send("user login successfully");
+       }
+       else{
+        throw new Error("password is not valid");
+       }
+
+    }
+    catch(err){
+     res.status(400).send("error occured "+ err.message);
+    }
+})
 
 app.get("/feed", async (req, res)=>{
     try{
