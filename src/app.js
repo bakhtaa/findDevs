@@ -8,8 +8,10 @@ const {validateSignUpData}= require('./utils/validation')
 const bcrypt= require("bcrypt");
 const cookieParser= require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const {userAuth}= require("./middlewares/auth");
 app.use(express.json());
 app.use(cookieParser());
+/*app.use(userAuth());*/
 
 //now our middleware express.json() will be activated for all the routes
 //app.use(callback function)
@@ -74,7 +76,7 @@ app.post("/login", async (req,res)=>{
 
        if(ispasswordvalid){
         //create a jwt 
-       const token = await jwt.sign({_id:user.id}, "DEV@TINDER9$");   
+       const token = await user.getJWT();
         console.log(token);
         //wrap the json token in a cookie 
         //send the cookie with the response 
@@ -90,16 +92,8 @@ app.post("/login", async (req,res)=>{
      res.status(400).send("error occured "+ err.message);
     }
 })
-app.get("/profile", async (req, res)=>{
-const cookies= req.cookies;
-const {token}= cookies;
-const decoded= await jwt.verify(token,"DEV@TINDER9$");
-console.log(decoded);
-const {_id}= decoded;
-console.log("logged in user is "+ _id);
-//get the profile back 
-const user = await User.findById(_id);
-
+app.get("/profile", userAuth,async (req, res)=>{
+const user= req.user;
  res.send(user);
 })
 app.get("/feed", async (req, res)=>{
@@ -111,6 +105,15 @@ app.get("/feed", async (req, res)=>{
     res.status(400).send('mechekel f thniya');
    }
 })
+
+app.post("sendConnectionRequest", (req,res)=>{
+    console.log("sending connection request");
+    res.send("connexion request sent");
+
+})
+
+
+
 
 app.delete("/user/:id", async (req,res)=>{
      //const userId= req.body.userId;

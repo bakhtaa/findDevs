@@ -61,6 +61,16 @@ const userSchema= mongoose.Schema(
         timestamps: true
     }
 )
+
+userSchema.methods.getJWToken= async function(){
+    // the this key word does not work inside an arrow function 
+    // this is why we use an anonymous function instead
+    const user= this;
+    
+    //this represents the instance of the model User
+     const token = await jwt.sign({_id:user.id}, "DEV@TINDER9$", {expiresIn: '1d'});
+     return token; 
+}
 const userModel= mongoose.model("User", userSchema);
 
 module.exports=userModel;
