@@ -72,7 +72,7 @@ app.post("/login", async (req,res)=>{
        //le role de bcrypt.compare est de prendre en parametre le mdp entré par l'utilisateur et 
        //stocké in the request , et de prendre en parametre le mot de passe haché de la database et 
        // de tout faire pour que ça marche  
-       const ispasswordvalid= await bcrypt.compare(password, user.password);
+       const ispasswordvalid= await user.validatepassword(password);
 
        if(ispasswordvalid){
         //create a jwt 
