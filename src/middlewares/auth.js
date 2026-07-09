@@ -25,6 +25,8 @@ if (!user){
     throw new Error("user not found");
 }
 req.user = user;
+//lena nzidou luser lel objet request bech najmou naccediwlou b des routes okhrina :
+//  req yokod nafssou fi kol route
 //if everything works we move to the next middleware
 next();
 
