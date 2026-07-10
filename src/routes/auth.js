@@ -39,7 +39,7 @@ const user= new User({
     emailId,
     password: passwordHash
 });
-
+//save the document into the mongo db 
 await user.save();
 res.send("user signed in yee yee");
 }

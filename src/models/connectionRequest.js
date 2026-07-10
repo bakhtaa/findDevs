@@ -19,7 +19,7 @@ const connectionRequestSchema= new mongoose.Schema(
             //we use enum when we want to restrict somrthing for some values : like a list  of options
             //enum is an object
             enum : {
-                values: ["ignore","interested", "accepted", "rejected"], 
+                values: ["ignored","interested", "accepted", "rejected"], 
                 message: `{VALUE} is incorrect status type`
 
             },
@@ -31,8 +31,8 @@ const connectionRequestSchema= new mongoose.Schema(
 
     )
 
-    const ConnectionRequestModel= new mongoose.model("ConnectionRequest", connectionRequestSchema);
+    const ConnectionRequestModel=  mongoose.model("ConnectionRequest", connectionRequestSchema);
 
 
-    module.exports= ConnectionRequest;
+    module.exports= ConnectionRequestModel;
     

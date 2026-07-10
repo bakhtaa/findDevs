@@ -1,4 +1,4 @@
-#DEV TINDER APIS
+#FIND DEVS APIS
 
 ##AUTH ROUTER
 - POST /signup
@@ -18,7 +18,15 @@
 -POST /receiveConnectionRequest/accepted/:userId
 -POST /receiveConnectionRequest/rejected/:userId
 
-STATUS of connectionRequest: ignore, interested, accepted, rejected
+
+
+#Connection request Router
+POST /request/send/:status/:userId
+
+
+
+
+STATUS of connectionRequest: ignored, interested, accepted, rejected
 ![alt text](image.png)
 
 ##user connection ROUTER
@@ -29,3 +37,4 @@ GET /feed
 ![alt text](image-2.png)
 ![alt text](image-3.png)
 ![alt text](image-4.png)
+![alt text](image-5.png)
