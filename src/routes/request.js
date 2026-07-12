@@ -26,6 +26,33 @@ const toUserid= req.params.toUserid;
 //le status est aussi envoyé dans la request : "/request/send/interested/:toUserid"
 //ici the status is interested , comment pouvons nous l'extraire?
 const status= req.params.status;
+//making the api validation 
+//on peut le faire ici qaudn la requete nous arrive mais le plus logique est de faire the api 
+//validation avant que la requete arrive : c'est à dire on construit une validation middleware avant
+
+const tab= ["interested", "ignored"]; 
+if (!tab.includes(status)){
+    return res.status(400).send("bad request");
+}
+//on va maintenant vérifier à travers le code que si the connection request is sent it should not
+//be sent again so we do retuen , et aussi que le user qui a reçu la connection request ne doit pas 
+//l'envoyer au user qui l'a deja envoyé auparavant pour empecher the duplication
+const existingConnectionRequest= await ConnectionRequest.findOne({
+
+    $or: [
+   { fromUserid,
+    toUserid},
+    {fromUserid: toUserid, toUserid: fromUserid}
+    ]
+   
+    
+})
+
+if(existingConnectionRequest){
+    return res.status(400).send("connection already created");
+}
+
+
 const connectionRequest= new ConnectionRequest({
     fromUserid,
     toUserid,
@@ -44,9 +71,11 @@ res.json({
     data
 })
 
+}
+
 
     // res.send(user.firstName + " sent you a connection request");
-   }
+   
    catch(err){
     res.status(400).send("an error has occured "+ err);
    }
