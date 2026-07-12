@@ -5,6 +5,7 @@ const User= require('../models/user');
 const ConnectionRequest= require('../models/connectionRequest');
 const express= require("express");
 const { userAuth } = require("../middlewares/auth");
+const { equals } = require('validator');
 const requestRouter= express.Router();
 
 
@@ -62,12 +63,27 @@ if(!existingUser){
     return res.status(400).send("this user doesn't exist");
 }
 
+//1 on vient de verifier que status doit être deux valeurs
+//2 on vient de verifier que touserid doit exister dans la bdd pour pouvoir y envoyer une req
+//3 on vient de verifier qu'une connection request doit exister une seule fois , si la même request
+//avec les deux users existe alors elle sera pas envoyer
+//4 la dernière chose à vérifier est qu'un user ne doit pas envoyer une requête à lui même
+//ceci est très simple parce qu'il suffit de comparer toUserid et fromUserid 
+//pour rappel le fromuserid est extrait de la request(le user connecté enregistré dans la req) 
+//et le toUiserid est extrait directement de la route donc de req.params
+
+//pour comparer deux objets on utilise equals
+if (toUserid.equals(fromUserid)){
+    return res.status(400).send("you cant friend yourself here bro");
+}
+
 const connectionRequest= new ConnectionRequest({
     fromUserid,
     toUserid,
     status
 } 
 );
+
 
 
 //await user.save() retourne le document sauvegardé (l'instance Mongoose),
