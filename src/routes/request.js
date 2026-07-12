@@ -1,7 +1,7 @@
 
 
-const User= require('../models/user');
 
+const User= require('../models/user');
 const ConnectionRequest= require('../models/connectionRequest');
 const express= require("express");
 const { userAuth } = require("../middlewares/auth");
@@ -51,7 +51,16 @@ const existingConnectionRequest= await ConnectionRequest.findOne({
 if(existingConnectionRequest){
     return res.status(400).send("connection already created");
 }
+//on doit aussi verifier si le user auquel we are sending the connection requestion does exist in our db 
+//for that on doit verifier si cet id existe dans la collection users 
+// l'id qu'on doit verifier est deja stocké dans toUserid 
+const existingUser= await User.findOne({
+    _id: toUserid
+})
 
+if(!existingUser){
+    return res.status(400).send("this user doesn't exist");
+}
 
 const connectionRequest= new ConnectionRequest({
     fromUserid,
