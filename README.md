@@ -38,3 +38,9 @@ GET /feed
 ![alt text](image-3.png)
 ![alt text](image-4.png)
 ![alt text](image-5.png)
+
+![alt text](image-6.png)
+
+Plus il y a d'index, plus les lectures sont rapides, mais plus les écritures sont coûteuses.
+
+![alt text](image-7.png)
