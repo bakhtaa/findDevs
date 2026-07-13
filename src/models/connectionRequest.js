@@ -31,6 +31,7 @@ const connectionRequestSchema= new mongoose.Schema(
 
     )
 
+
     //creating a compound index
     connectionRequestSchema.index({fromUserid: 1 , toUserid: 1});
     // this query will make fromUseris , and toUserid  findOne() query very fast
