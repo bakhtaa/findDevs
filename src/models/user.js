@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 var validator= require('validator');
 const bcrypt= require("bcrypt");
 const jwt = require("jsonwebtoken");
-const userSchema= mongoose.Schema(
+const userSchema=  mongoose.Schema(
     {
         firstName: {
             type : String,
@@ -17,7 +17,11 @@ const userSchema= mongoose.Schema(
 
             type: String,
             required: true,
+            //in mongodb : if you make a field as unique : mongodb automatically 
+            //creates an index for that
+//from the doc : you can always define mongodb indexes using schemas type options : unique, index, sparse
             unique: true,
+            //index: true
             validate(value){
                 if (! validator.isEmail(value)){
                   throw new Error("invalid email address bro");
