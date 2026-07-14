@@ -10,7 +10,7 @@ const requestRouter= express.Router();
 
 
 
-
+//bech tabeth request men luser l user
 requestRouter.post("/request/send/:status/:toUserid",userAuth, async (req,res)=>{
    try{
 //apres qu'en passe sur le middleware userAuth, on stocke dans la request le user qui vient
@@ -109,6 +109,72 @@ res.json({
 })
 
 
+//ki tjik request chnwa tamel : maaneha bech tjik status interested
+requestRouter.post("/request/review/:status/:requestId",userAuth, async (req,res)=>{
+    //avant de commencer status doit être soit accepted soit rejected
+    try{
+//we get the loggin user stocké in the request
+const loginUser= req.user;
+const requestid= req.params.requestId;
+const status=req.params.status;
+//const  {requestid, status}=req.params;
+//request from ashkey to ellon
+//we have to make sure that elon is the connected user avant de traiter la request de elon
+//ceci est facile il suffit de verifier le firstname du user connecté
+//const connectionrequestyasahbi= await ConnectionRequest.findById(requestid);
+
+
+   const tabstatus=["accepted", "rejected"];
+
+    if (! tabstatus.includes(status)){
+      return res.status(400).send("bad request");
+    }
+
+const connectionrequestallinone= await ConnectionRequest.findOne({
+    _id: requestid,
+    //this will make sure that the logged in user is the one who's receiving the request
+    toUserid: loginUser._id,
+   //the status of the connection request should be interested 
+   status: "interested"
+})
+  //we also have to check if requestId should be valid
+  //it means it should be present in our database
+if(!connectionrequestallinone ){
+    res.status(400).send("la request n'est pas valide");
+}
+//on va verifier que toUserid et l'id du user connecté sont égaux
+//ceci par une requete findOne qui specifie deja le touserid qui doit être identique à notre userid logged in
+/*if(! connectionrequestyasahbi.toUserid===user._id){
+res.status(400).send("request sent to the wrong user");
+}*/ 
+        
+      
+  //if we're here this means li status matnajem tkoun ken accepted or rejected
+  //tawa we re gonna treat the two cases : ken accepted chnwa namlou w ken rejected chnwa namlou
+  //if we want to accept the request 
+  //on change le status to accepted
+//actually the accepted or rejected comes with the route 
+//our only role is to change to status interested to whatever status comes from the route
+connectionrequestallinone.status= status;
+//là le status vient d'être changé from interested => accepted or ignored
+ 
+//maintenant on va juste enregistrer les changements vers la base de données
+
+const data = await connectionrequestallinone.save();
+//on vient de changer le status vers accepted or ignored 
+//maintenant if accepted qu'est ce que ça change and if ignored qu'est ce que ça change
+//n'oublie pas de renvoyer une response
+
+res.send({
+    message:   "connection request "+ data.status, 
+    data  
+}); 
+     }
+     catch(err){
+        res.send("an error has occured "+ err);
+     }
+   
+})
 
 
 module.exports= requestRouter;
