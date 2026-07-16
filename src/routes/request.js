@@ -77,7 +77,7 @@ if(!existingUser){
 //c'est pour cela toUserid.equals(fromUserid) ne marchera pas : il faut qu'on utilise 
 //object.equals() pour que ça marche 
 
-if (fromUserid.equals(fromUserid)){
+if (fromUserid.equals(toUserid)){
     return res.status(400).send("you cant friend yourself here bro");
 }
 

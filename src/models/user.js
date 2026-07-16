@@ -55,7 +55,7 @@ const userSchema=  mongoose.Schema(
         }, 
         about: {
             type : String,
-            default: "bara asba"
+            default: "ti wohh"
         }, 
         Skills: {
             //skills multiple : array of skills
