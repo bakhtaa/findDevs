@@ -15,10 +15,10 @@ requestRouter.post("/request/send/:status/:toUserid",userAuth, async (req,res)=>
    try{
 //apres qu'en passe sur le middleware userAuth, on stocke dans la request le user qui vient
 //de faire le login donc on aura  
-const fromUserid= req.user._id;
+const fromUserid= req.user._id; //ceci donne un objet
 //pour avoir notre toUserid il faut l'extraire des params : /request/send/interested/:toUserid"
 //ceci se stocke dans la req.params : il suffit de l'extraire 
-const toUserid= req.params.toUserid;
+const toUserid= req.params.toUserid; //ceci donne une chaine de caractères
 
 //nous avons maintenant assez d'info pour pouvoir remplir note ConnectionRequestModel : 
 //touserid et fromuserid
@@ -35,8 +35,8 @@ const tab= ["interested", "ignored"];
 if (!tab.includes(status)){
     return res.status(400).send("bad request");
 }
-//on va maintenant vérifier à travers le code que si the connection request is sent it should not
-//be sent again so we do retuen , et aussi que le user qui a reçu la connection request ne doit pas 
+//on va maintenant vérifier à travers le code que si the connection request is sent : it should not
+//be sent again so we do return , et aussi que le user qui a reçu la connection request ne doit pas 
 //l'envoyer au user qui l'a deja envoyé auparavant pour empecher the duplication
 const existingConnectionRequest= await ConnectionRequest.findOne({
 
@@ -73,7 +73,11 @@ if(!existingUser){
 //et le toUiserid est extrait directement de la route donc de req.params
 
 //pour comparer deux objets on utilise equals
-if (toUserid.equals(fromUserid)){
+//ici toUseid est extraite des params donc ça devient une chaine de caractères
+//c'est pour cela toUserid.equals(fromUserid) ne marchera pas : il faut qu'on utilise 
+//object.equals() pour que ça marche 
+
+if (fromUserid.equals(fromUserid)){
     return res.status(400).send("you cant friend yourself here bro");
 }
 
