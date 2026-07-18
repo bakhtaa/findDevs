@@ -2,9 +2,6 @@
 //GET /user/connections
 //GET /user/requests
 //GET /user/feed get the profiles of the other users on the plateform 
-
-
-
 //first route is GET /user/connections
 
 
@@ -26,7 +23,7 @@ userRouter.get("/user/connections", userAuth, async (req,res)=>{
     const connections= await  ConnectionRequest.find({
         
         toUserid: loggedUser._id,
-        status: "accepted"}); 
+        status: "accepted"}).populate("fromUserid", ["firstName", "lastName"]); 
     //ceci veut dire renvoie moi toutes les connections dont le status est accepted
     //maintenant que nous avons un tableau connections 
     //il reste juste de le renvoyer avec la response
@@ -46,6 +43,7 @@ userRouter.get("/user/requests", userAuth, async (req,res)=>{
     //donc on doit extraire de la base de données tout les documents ConnectionRequest 
     //dont le status est accepted 
     //ceci est donc un tableau de connections qu'on doit renvoyer
+    const loggedUser= req.user;
     const requests= await ConnectionRequest.find({ 
         toUserid: loggedUser._id, 
         status: "interested"}); 
@@ -64,4 +62,4 @@ userRouter.get("/user/requests", userAuth, async (req,res)=>{
 
 
 
-
+module.exports=userRouter;

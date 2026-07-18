@@ -12,6 +12,7 @@ const {userAuth}= require("./middlewares/auth");
 const authRouter= require("./routes/auth");
 const profileRouter=require("./routes/profile");
 const requestRouter=require("./routes/request");
+const userRouter= require('./routes/user');
 app.use(express.json());
 app.use(cookieParser());
 /*app.use(userAuth());*/
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use('/',authRouter);
 app.use('/',requestRouter);
 app.use('/',profileRouter);
+app.use('/',userRouter);
 
 app.get("/feed", async (req, res)=>{
     try{
