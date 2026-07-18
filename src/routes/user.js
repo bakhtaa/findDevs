@@ -22,7 +22,11 @@ userRouter.get("/user/connections", userAuth, async (req,res)=>{
     //donc on doit extraire de la base de données tout les documents ConnectionRequest 
     //dont le status est accepted 
     //ceci est donc un tableau de connections qu'on doit renvoyer
-    const connections= await  ConnectionRequest.find({status: "accepted"}); 
+    const loggedUser= req.user; 
+    const connections= await  ConnectionRequest.find({
+        
+        toUserid: loggedUser._id,
+        status: "accepted"}); 
     //ceci veut dire renvoie moi toutes les connections dont le status est accepted
     //maintenant que nous avons un tableau connections 
     //il reste juste de le renvoyer avec la response
@@ -42,7 +46,10 @@ userRouter.get("/user/requests", userAuth, async (req,res)=>{
     //donc on doit extraire de la base de données tout les documents ConnectionRequest 
     //dont le status est accepted 
     //ceci est donc un tableau de connections qu'on doit renvoyer
-    const requests= await ConnectionRequest.find({status: "interested"}); 
+    const requests= await ConnectionRequest.find({ 
+        toUserid: loggedUser._id, 
+        status: "interested"}); 
+
     //ceci veut dire renvoie moi toutes les connections dont le status est accepted
     //maintenant que nous avons un tableau connections 
     //il reste juste de le renvoyer avec la response
