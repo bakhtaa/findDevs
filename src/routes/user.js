@@ -55,7 +55,7 @@ userRouter.get("/user/requests", userAuth, async (req,res)=>{
     //voila le travail fait sans verification
     }
     catch(err){
-        res.send("an error occured somewhere "+ err);
+        res.status(400).send("an error occured somewhere "+ err);
     }
     
 })
